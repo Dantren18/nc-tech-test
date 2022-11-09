@@ -3,7 +3,8 @@ import { app } from "../server";
 
 describe("GET /cards", () => {
   test.only("Status 200: Returns an array of objects containing correct keys", async () => {
-    const response = await request(app).get("/cards/");
+    const response = await request(app).get("/cards");
+    console.log(response.body, "res");
     expect(response.status).toBe(200);
     expect(response.body).toEqual(
       expect.objectContaining({
