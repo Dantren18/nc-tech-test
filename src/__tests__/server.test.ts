@@ -26,21 +26,24 @@ describe("GET /cards", () => {
     return request(app)
       .get("/carsd")
       .expect(404)
-      .then(({ body }) => {});
+      .then(({ body }) => {
+        expect(body).toEqual({ msg: "Route not found" });
+      });
   });
 });
 
 describe("GET /cards/:cardId", () => {
-  test.only("Status 200: Returns matching card title", async () => {
+  test("Status 200: Returns matching card title", async () => {
     return request(app)
       .get("/cards/card001")
       .expect(200)
       .then(({ body }) => {
-        expect(body.card[0]).toEqual({
-          id: "card001",
+        expect(body.card).toEqual({
           title: "card 1 title",
-          sizes: ["sm", "md", "gt"],
-          basePrice: 200,
+          imageUrl: "/front-cover-portrait-1.jpg",
+          card_id: "card001",
+          base_price: 200,
+          availableSizes: ["sm", "md", "gt"],
           pages: [
             {
               title: "Front Cover",
@@ -60,13 +63,23 @@ describe("GET /cards/:cardId", () => {
             }
           ]
         });
-        expect(Array.isArray(body.card)).toEqual(true);
-        expect(typeof body.card[0]).toEqual("object");
-        expect(body.card.length).toEqual(1);
+        expect(typeof body.card).toEqual("object");
       });
   });
-  test("Status 404: card not found for ID that doesn't exist", async () => {
-    const response = await request(app).get("/cards/card9534853");
-    expect(response.status).toBe(404);
+  test("Status 400: Bad Request card not found for ID that doesn't exist", async () => {
+    return request(app)
+      .get("/cards/card001234324")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body).toEqual({ msg: "That card ID is not valid" });
+      });
+  });
+  test("Status 404: trying to request from incorrectly spelled endpoint", async () => {
+    return request(app)
+      .get("/carsd/card001")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body).toEqual({ msg: "Route not found" });
+      });
   });
 });
