@@ -1,4 +1,3 @@
-const { send } = require("process");
 const { getAllCardsModel, getCardByIDModel } = require("./card.model.js");
 
 exports.getAllCardsController = async (req, res, next) => {
@@ -19,7 +18,6 @@ exports.getCardByIDModel = async (req, res, next) => {
     if (err.status == 400) {
       res.status(400).send({ msg: "That card ID is not valid" });
     }
-
     next(err);
   }
 };

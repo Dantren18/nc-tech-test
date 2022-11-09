@@ -1,9 +1,10 @@
 const cardData = require("./data/cards.json");
 const templateData = require("./data/templates.json");
+const { imageUrlFinder } = require("./utils.js");
 
-const imageUrlFinder = (data, id) => {
-  return data.filter((data) => data.id == id)[0].imageUrl;
-};
+// const imageUrlFinder = (data, id) => {
+//   return data.filter((data) => data.id == id)[0].imageUrl;
+// };
 
 exports.getAllCardsModel = () => {
   const formattedCardData = cardData.map((card) => {
