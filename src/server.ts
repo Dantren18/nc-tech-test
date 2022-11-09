@@ -1,5 +1,8 @@
 const express = require("express");
-const { getAllCardsController, getCardByIDModel } = require("./controllers.js");
+const {
+  getAllCardsController,
+  getCardByIDModel
+} = require("./card.controller.js");
 
 const app = express();
 

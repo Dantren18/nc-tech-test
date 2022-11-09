@@ -2,7 +2,7 @@ import * as request from "supertest";
 
 const { app } = require("../server");
 
-describe.only("GET /cards", () => {
+describe("GET /cards", () => {
   test("Status 200: Returns an array of objects containing correct keys", async () => {
     return request(app)
       .get("/cards")
@@ -23,20 +23,50 @@ describe.only("GET /cards", () => {
       });
   });
   test("Status 404: directory spelled incorrectly", async () => {
-    const response = await request(app).get("/carsd/");
-    expect(response.status).toBe(404);
+    return request(app)
+      .get("/carsd")
+      .expect(404)
+      .then(({ body }) => {});
   });
 });
 
 describe("GET /cards/:cardId", () => {
-  test("Status 200: Returns matching card title", async () => {
-    const response = await request(app).get("/cards/card001");
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual("test");
+  test.only("Status 200: Returns matching card title", async () => {
+    return request(app)
+      .get("/cards/card001")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.card[0]).toEqual({
+          id: "card001",
+          title: "card 1 title",
+          sizes: ["sm", "md", "gt"],
+          basePrice: 200,
+          pages: [
+            {
+              title: "Front Cover",
+              templateId: "template001"
+            },
+            {
+              title: "Inside Left",
+              templateId: "template002"
+            },
+            {
+              title: "Inside Right",
+              templateId: "template003"
+            },
+            {
+              title: "Back Cover",
+              templateId: "template004"
+            }
+          ]
+        });
+        expect(Array.isArray(body.card)).toEqual(true);
+        expect(typeof body.card[0]).toEqual("object");
+        expect(body.card.length).toEqual(1);
+      });
   });
   test("Status 404: card not found for ID that doesn't exist", async () => {
     const response = await request(app).get("/cards/card9534853");
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual("test");
+    expect(response.status).toBe(404);
   });
 });

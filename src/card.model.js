@@ -16,4 +16,9 @@ exports.getAllCardsModel = () => {
   return formattedCardData;
 };
 
-exports.getCardByIDModel = (id) => {};
+exports.getCardByIDModel = (cardId) => {
+  console.log("inside the new model");
+  const singleCard = cardData.filter((card) => card.id == cardId);
+  console.log(singleCard, "carddata");
+  return singleCard;
+};

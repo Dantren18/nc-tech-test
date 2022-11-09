@@ -9,4 +9,12 @@ exports.getAllCardsController = async (req, res, next) => {
   }
 };
 
-exports.getCardByIDModel = (req, res, next) => {};
+exports.getCardByIDModel = async (req, res, next) => {
+  const cardId = req.params.cardId;
+  try {
+    const response = await getCardByIDModel(cardId);
+    res.status(200).send({ card: response });
+  } catch (err) {
+    next(err);
+  }
+};
